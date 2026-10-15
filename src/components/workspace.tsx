@@ -82,6 +82,7 @@ export default function Workspace(){
   useEffect(()=>{scrollRef.current?.scrollTo({top:scrollRef.current.scrollHeight,behavior:'smooth'});},[session.messages,aiBusy]);
   useEffect(()=>{
     function onKey(e:KeyboardEvent){
+      if(document.querySelector('[role="dialog"]')&&e.key!=='Escape')return;
       if((e.metaKey||e.ctrlKey)&&e.key==='Enter'){e.preventDefault();void runCode();}
       if((e.metaKey||e.ctrlKey)&&e.key==='s'){e.preventDefault();const success=saveSession(sessionRef.current);setSaved(success);setToast(success?'Session saved in this browser':'Browser storage is unavailable. Export your session to keep a copy.');}
       if(e.key==='Escape'){setConnectionOpen(false);setHelpOpen(false);setMenuOpen(false);}
@@ -129,7 +130,7 @@ export default function Workspace(){
     try{
       const outcome=await performRun(source,lang,stdin,version);
       if(version!==requestVersion.current)return;
-      if(outcome.exitCode!==0&&outcome.exitCode!==130&&outcome.exitCode!==124&&outcome.exitCode!==125&&s.autoFix){
+      if(outcome.exitCode!==0&&outcome.exitCode!==130&&outcome.exitCode!==124&&outcome.exitCode!==125&&sessionRef.current.autoFix){
         if(!(serverRef.current||keyRef.current)){
           setToast('Connect Groq to automatically repair this error.');return;
         }
@@ -137,7 +138,7 @@ export default function Workspace(){
         addMessage({role:'user',language:lang,content:`Fix the ${languageInfo[lang].name} error from my last run:\n${outcome.stderr.slice(0,8000)}`});
         const repair=await getAI('fix','Fix this failed run. Explain the cause and the exact changes, step by step.',source,lang,outcome.stderr.slice(0,12000));
         if(version!==requestVersion.current)return;
-        const canApply=repair.code&&sessionRef.current.language===lang&&sessionRef.current.files[lang].code===source;
+        const canApply=repair.code&&sessionRef.current.autoFix&&sessionRef.current.language===lang&&sessionRef.current.files[lang].code===source;
         addMessage({role:'assistant',language:lang,content:repair.explanation,code:repair.code??undefined,changes:repair.changes});
         if(canApply){
           const fixed=repair.code!;
@@ -149,7 +150,7 @@ export default function Workspace(){
           setToast(retry.exitCode===0?'Fixed, explained, and verified with a new run.':'A fix was applied. Check the new error.');
         }else if(repair.code){setToast('Your code changed while I worked. Review the suggested fix.');}
       }
-    }catch(error){setToast(error instanceof Error?error.message:'Something went wrong. Please try again.');}
+    }catch(error){if(version===requestVersion.current)setToast(error instanceof Error?error.message:'Something went wrong. Please try again.');}
     finally{runLock.current=false;aiLock.current=false;setRunning(false);setAiBusy(false);setRunStatus('');}
   }
   async function askAI(prompt:string,action:'chat'|'fix'='chat'){
