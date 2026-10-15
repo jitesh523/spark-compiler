@@ -8,6 +8,13 @@ export type AIHistoryMessage = {
   changes?: string[];
 };
 
+export type AIRunHistoryEntry = {
+  language: AILanguage;
+  stdout: string;
+  stderr: string;
+  exitCode: number;
+};
+
 export type AIRequest = {
   action: "chat" | "fix";
   language: AILanguage;
@@ -16,6 +23,7 @@ export type AIRequest = {
   error?: string;
   message?: string;
   history?: AIHistoryMessage[];
+  runHistory?: AIRunHistoryEntry[];
   /** Supplied for this request only. Never persist this field with session data. */
   apiKey?: string;
 };

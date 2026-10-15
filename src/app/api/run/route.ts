@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { isSameOriginRequest } from "@/lib/request-origin";
 
 export const runtime = "nodejs";
 export const maxDuration = 40;
@@ -31,12 +32,7 @@ function json(data: unknown, status = 200) {
 }
 
 function checkOrigin(request: Request) {
-  const origin = request.headers.get("origin");
-  if (request.headers.get("sec-fetch-site") === "cross-site") throw new RequestError("Cross-site requests are not allowed.", 403);
-  if (origin) {
-    try { if (new URL(origin).origin !== new URL(request.url).origin) throw new Error(); }
-    catch { throw new RequestError("Cross-site requests are not allowed.", 403); }
-  }
+  if (!isSameOriginRequest(request)) throw new RequestError("Cross-site requests are not allowed.", 403);
 }
 
 function checkQuota(request: Request) {

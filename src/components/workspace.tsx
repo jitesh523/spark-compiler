@@ -2,7 +2,7 @@
 
 import dynamic from 'next/dynamic';
 import { useEffect, useRef, useState } from 'react';
-import { ArrowDownToLine, ArrowUpRight, BookOpen, Braces, Check, CheckCheck, ChevronDown, ChevronRight, CircleHelp, Code2, Copy, FileCode2, FolderCode, History, KeyRound, LoaderCircle, MoreHorizontal, PanelLeftClose, Play, Plus, RotateCcw, Send, Settings2, ShieldCheck, Sparkles, Square, Terminal, Trash2, Upload, WandSparkles, X, Zap } from 'lucide-react';
+import { ArrowDownToLine, ArrowUpRight, BookOpen, Braces, Check, ChevronDown, ChevronRight, CircleHelp, Code2, Copy, FileCode2, FolderCode, History, KeyRound, LoaderCircle, MoreHorizontal, Play, Plus, RotateCcw, Send, Settings2, ShieldCheck, Sparkles, Square, Terminal, Trash2, Upload, WandSparkles, X, Zap } from 'lucide-react';
 import { boundMessages, createSession, exportSession, loadSession, parseSession, saveSession, type Session, type Language, type ChatMessage, type RunEntry } from '@/lib/session';
 import { executeCode, type RunResult } from '@/lib/runtime';
 
@@ -105,6 +105,7 @@ export default function Workspace(){
       const response=await fetch('/api/ai',{method:'POST',headers:{'Content-Type':'application/json'},signal:controller.signal,body:JSON.stringify({
         action,language:lang,code,stdin:snapshot.files[lang].stdin,error,message,
         history:snapshot.messages.map(m=>({role:m.role,content:m.content,language:m.language,code:m.code})),
+        runHistory:snapshot.runs.slice(-8).map(r=>({language:r.language,stdout:r.stdout.slice(0,2000),stderr:r.stderr.slice(0,2000),exitCode:r.exitCode})),
         ...(keyRef.current?{apiKey:keyRef.current}:{}),
       })});
       const data=await response.json();

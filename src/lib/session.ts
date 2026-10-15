@@ -66,7 +66,7 @@ def greet(name):
     return f"Hello, {name}! 👋"
 
 
-languages = ["Python", "JavaScript", "TypeScript"]
+languages = ["Python", "C", "C++", "Java"]
 
 print(greet("builder"))
 print("Welcome to your coding playground.\\n")
@@ -135,7 +135,7 @@ function greet(name) {
   return \`Hello, \${name}! 👋\`;
 }
 
-const languages = ["Python", "JavaScript", "TypeScript"];
+const languages = ["Python", "C", "C++", "Java"];
 
 console.log(greet("builder"));
 console.log("Welcome to your coding playground.\\n");
@@ -153,7 +153,7 @@ function greet(name: string): string {
   return \`Hello, \${name}! 👋\`;
 }
 
-const languages: string[] = ["Python", "JavaScript", "TypeScript"];
+const languages: string[] = ["Python", "C", "C++", "Java"];
 
 console.log(greet("builder"));
 console.log("Welcome to your coding playground.\\n");
