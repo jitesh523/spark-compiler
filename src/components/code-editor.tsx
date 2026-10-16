@@ -11,11 +11,11 @@ import { HighlightStyle, syntaxHighlighting } from '@codemirror/language';
 import { tags } from '@lezer/highlight';
 
 const theme = EditorView.theme({
-  '&': {height:'100%',backgroundColor:'#15171e',color:'#dadce5',fontSize:'14px'},
-  '.cm-scroller':{fontFamily:'"SFMono-Regular", Consolas, "Liberation Mono", monospace',lineHeight:'1.85'},
-  '.cm-content':{padding:'22px 0',caretColor:'#c3a8ff'},
+  '&': {height:'100%',backgroundColor:'#15171e',color:'#dadce5',fontSize:'15px'},
+  '.cm-scroller':{fontFamily:'"SFMono-Regular", Consolas, "Liberation Mono", monospace',lineHeight:'1.65',overflow:'auto'},
+  '.cm-content':{padding:'14px 0',caretColor:'#c3a8ff'},
   '.cm-line':{padding:'0 24px 0 12px'},
-  '.cm-gutters':{backgroundColor:'#15171e',color:'#565c70',border:'none',padding:'22px 12px 0 12px',minWidth:'54px'},
+  '.cm-gutters':{backgroundColor:'#15171e',color:'#737b91',border:'none',padding:'0 8px',minWidth:'48px'},
   '.cm-activeLine, .cm-activeLineGutter':{backgroundColor:'#ffffff04'},
   '.cm-selectionBackground, &.cm-focused .cm-selectionBackground':{backgroundColor:'#b49ae52b'},
   '&.cm-focused':{outline:'none'},
@@ -30,6 +30,6 @@ const highlighting = HighlightStyle.define([
   {tag:tags.operator,color:'#bda6e8'}, {tag:tags.bool,color:'#e3aa86'}, {tag:tags.typeName,color:'#e3cc92'}
 ]);
 export default function CodeEditor({code,language,onChange,onCursor}:{code:string;language:Language;onChange:(code:string)=>void;onCursor:(line:number,col:number)=>void}) {
-  const extensions = useMemo(()=>[language==='python'?python():language==='java'?java():language==='c'||language==='cpp'?cpp():javascript({typescript:language==='typescript'}),syntaxHighlighting(highlighting),EditorView.lineWrapping],[language]);
+  const extensions = useMemo(()=>[language==='python'?python():language==='java'?java():language==='c'||language==='cpp'?cpp():javascript({typescript:language==='typescript'}),syntaxHighlighting(highlighting)],[language]);
   return <CodeMirror aria-label="Code editor" value={code} height="100%" extensions={extensions} theme={theme} basicSetup={{autocompletion:true,bracketMatching:true,foldGutter:true,highlightActiveLine:true,highlightSelectionMatches:true}} onChange={onChange} onUpdate={v=>{if(v.selectionSet){const p=v.state.selection.main.head,l=v.state.doc.lineAt(p);onCursor(l.number,p-l.from+1);}}}/>;
 }

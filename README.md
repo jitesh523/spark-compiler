@@ -8,6 +8,7 @@
 
 ## What you can do
 
+- **Use the whole screen:** work in a full-height editor, drag the divider to resize, collapse the tools panel, or expand either pane. Output, Input, AI, and History share tabs so each has room to breathe.
 - **Write and run six languages:** Python, C, C++, Java, JavaScript, and TypeScript.
 - **Learn while you code:** ask Spark to explain a line, walk through a program, or help build something new.
 - **Repair failed runs:** enable Auto-fix to get one AI correction, an explanation, and a fresh execution of the corrected program.
