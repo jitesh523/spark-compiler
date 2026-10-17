@@ -115,13 +115,6 @@ h1, h2, p { margin: 0; }
 .editor-container > .cm-theme, .editor-container > .cm-theme-dark { height: 100%; }
 .editor-loading { display: flex; align-items: center; justify-content: center; gap: 12px; height: 100%; color: var(--muted); font-size: 12px; }
 .editor-bottom { display: flex; align-items: center; gap: 15px; flex-shrink: 0; height: 48px; padding: 0 12px; border-top: 1px solid var(--border); background: #191b22; }
-.autofix-control { display: flex; align-items: center; gap: 7px; color: #b0aebf; font-size: 11px; }
-.autofix-control > svg { color: #b49bdc; }
-.toggle { display: flex; align-items: center; flex-shrink: 0; width: 25px; height: 14px; padding: 2px; border-radius: 20px; background: #4a4b58; }
-.toggle span { width: 10px; height: 10px; border-radius: 50%; background: #b6b6c5; transition: transform .2s; }
-.toggle.on { background: #ac8adf; }
-.toggle.on span { transform: translateX(11px); background: #f3eaff; }
-.info-tooltip { display: flex; color: #727688; }
 .cursor-location { margin-left: auto; color: #858a9c; font-size: 10px; white-space: nowrap; }
 .run-button { display: flex; align-items: center; justify-content: center; gap: 7px; min-width: 110px; padding: 8px 12px; border: 1px solid #c4a6f3; border-radius: 5px; background: #c4a6f3; color: #241c32; font-size: 12px; font-weight: 700; white-space: nowrap; }
 .run-button:hover { background: #d3b9fa; }
@@ -330,7 +323,6 @@ h1, h2, p { margin: 0; }
   .editor-tools .focus-mode-button { display: inline-flex; }
   .editor-tools .tools-toggle { display: none; }
   .editor-bottom { height: 48px; padding: 0 10px; gap: 8px; }
-  .autofix-control { gap: 6px; font-size: 11px; }
   .cursor-location { font-size: 9px; }
   .run-button { margin-left: auto; min-width: 102px; font-size: 12px; padding: 8px 10px; }
   .tool-panel .console-card, .tool-panel .assistant-card { height: 100%; }
@@ -355,8 +347,7 @@ h1, h2, p { margin: 0; }
   .language-select select { font-size: 11px; }
   .editor-tools { gap: 3px; }
   .editor-tools .focus-mode-button { width: 27px; min-width: 27px; padding: 0; font-size: 0; gap: 0; }
-  .cursor-location, .autofix-control .info-tooltip { display: none; }
-  .autofix-control { font-size: 10px; gap: 5px; }
+  .cursor-location { display: none; }
   .run-button { min-width: 100px; font-size: 11px; }
   .run-button kbd { font-size: 9px; }
   .console-toolbar { padding: 0 8px 0 12px; }
@@ -412,3 +403,12 @@ h1, h2, p { margin: 0; }
   .mobile-tabs button svg { width: 14px; height: 14px; }
 }
 @media (max-width: 820px) { .tool-expand { display: none; } }
+
+.manual-help-status { display: flex; align-items: center; gap: 7px; color: #b7a6cf; font-size: 11px; white-space: nowrap; }
+.error-help { display: flex; flex-direction: column; align-items: flex-start; gap: 14px; margin-top: 22px; padding: 16px; border: 1px solid #4b3b60; border-radius: 8px; background: #221c2c; }
+.error-help strong { color: #dfceef; font-size: 13px; font-weight: 600; }
+.error-help p { margin-top: 6px; color: #b2a5c3; font-size: 12px; line-height: 1.7; }
+.error-help p.error-help-context { color: #d6b58e; }
+.error-help-button { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 10px 13px; border: 1px solid #8e71b4; border-radius: 6px; background: #bca0ec; color: #241c30; font-size: 12px; font-weight: 600; }
+.error-help-button:hover { background: #ceb3f5; }
+@media(max-width:480px) { .manual-help-status { font-size: 10px; gap: 5px; } }

@@ -38,7 +38,6 @@ export interface Session {
   messages: ChatMessage[];
   runs: RunEntry[];
   checkpoints: Checkpoint[];
-  autoFix: boolean;
 }
 
 export const SESSION_KEY = "spark-compiler.session.v1";
@@ -187,7 +186,6 @@ export function createSession(): Session {
     messages: [],
     runs: [],
     checkpoints: [],
-    autoFix: true,
   };
 }
 
@@ -283,7 +281,7 @@ function parseList<T>(value: unknown, maximum: number, parse: (item: unknown) =>
 /** Rebuild only known fields so imported extras can never become persisted secrets. */
 function validateSession(value: unknown): Session | null {
   if (!isRecord(value) || !isId(value.id) || !isDate(value.createdAt) || !isDate(value.updatedAt)
-    || !isLanguage(value.language) || typeof value.autoFix !== "boolean" || !isRecord(value.files)) {
+    || !isLanguage(value.language) || !isRecord(value.files)) {
     return null;
   }
   const files = {} as Session["files"];
@@ -308,7 +306,6 @@ function validateSession(value: unknown): Session | null {
     messages,
     runs,
     checkpoints,
-    autoFix: value.autoFix,
   };
 }
 

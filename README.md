@@ -2,7 +2,7 @@
   <img src="src/app/icon.svg" width="64" height="64" alt="Spark logo" />
   <h1>Spark Compiler</h1>
   <p><strong>A little code. A lot of possibility.</strong></p>
-  <p>A no-login coding workspace with real execution, AI explanations, automatic error repair, and browser-local session memory.</p>
+  <p>A no-login coding workspace with real execution, AI explanations, on-demand error help, and browser-local session memory.</p>
   <p><a href="https://spark-ai-compiler.vercel.app"><strong>Open the live app →</strong></a></p>
 </div>
 
@@ -11,7 +11,7 @@
 - **Use the whole screen:** work in a full-height editor, drag the divider to resize, collapse the tools panel, or expand either pane. Output, Input, AI, and History share tabs so each has room to breathe.
 - **Write and run six languages:** Python, C, C++, Java, JavaScript, and TypeScript.
 - **Learn while you code:** ask Spark to explain a line, walk through a program, or help build something new.
-- **Repair failed runs:** enable Auto-fix to get one AI correction, an explanation, and a fresh execution of the corrected program.
+- **Get help with failed runs:** click **Help me fix this error** for an AI explanation and suggested correction, then choose whether to apply it.
 - **Stay in control:** undo an AI change, review a suggested program before applying it, and stop a running task.
 - **Work with real input:** supply standard input and inspect stdout, stderr, exit status, and execution time.
 - **Keep your progress:** recover code and conversation after a refresh, restore earlier runs, and export or import a session as JSON.
@@ -20,7 +20,7 @@ No account is required. Running code does not require a Groq key; AI features do
 
 ## Quick start
 
-Use **Node.js 20.9 or newer** and npm. The deployed app uses Node.js 24.
+Use **Node.js 24** and npm, matching the deployed app and test environment.
 
 ```bash
 git clone https://github.com/jitesh523/spark-compiler.git
@@ -51,20 +51,22 @@ You can also leave the server key unset and use **Connect AI** inside the app wi
 2. Add any required values in the **Input** tab, one value per line.
 3. Press **Run code**, or use **Cmd/Ctrl + Enter**.
 4. Check **Output** for the program result or compiler diagnostics.
-5. Ask Spark a question, or enable **Auto-fix errors** before running to let it repair a failed program.
+5. After a failed source run, click **Help me fix this error** in **Output**, or ask Spark a question in **AI**.
+6. Review any suggested correction, click **Apply to editor** if you want it, then press **Run code** to test it.
 
 Each language has its own source and input. Java programs should define a `Main` class. Use **File options** to download or copy source, **Run history** to restore previous code, and **Export session** to save a portable backup. **Cmd/Ctrl + S** saves the current session in the browser.
 
-### How automatic repair works
+### How error help works
 
 ```text
-Run code → capture an error → ask Groq for a minimal correction
-         → save an undo checkpoint → apply the correction → run once more
+Run code → inspect an error → click Help me fix this error
+         → review the explanation and suggested correction
+         → click Apply to editor → press Run code to test
 ```
 
-Spark explains what happened, what changed, and why the correction works. It applies a repair only if the source and language still match the program it examined. If you edit the code while AI is working, the answer remains a suggestion for you to review.
+Clicking **Help me fix this error** asks Groq to explain what happened and suggest a correction. Spark explains what changed and why it should work. The answer stays a suggestion until you explicitly click **Apply to editor**. Applying a suggestion saves an undo checkpoint so you can restore your previous code.
 
-Automatic repair makes **one attempt per failed run**. Stopped runs, timeouts, and unavailable runtime services do not trigger repair. Manual suggestions use **Apply to editor** and then **Run code**. AI can make mistakes, so review both the explanation and actual output.
+A failed run leaves the error in **Output** for you to inspect. AI help starts when you request it; code changes and reruns each require your action. After applying a correction, press **Run code** to test it. AI can make mistakes, so review both the explanation and actual output.
 
 ## Supported runtimes
 
@@ -149,7 +151,7 @@ src/
 │   └── page.tsx             # App entry point
 ├── components/
 │   ├── code-editor.tsx      # Language-aware editor
-│   └── workspace.tsx        # Run, repair, chat, and history flows
+│   └── workspace.tsx        # Run, error help, chat, and history flows
 └── lib/
     ├── ai-types.ts          # Shared AI request/response types
     ├── request-origin.ts    # Same-origin request validation
@@ -179,7 +181,7 @@ The automated suite covers session round-trips, malformed imports, credential-fi
 2. Select **Next.js** as the framework and keep the repository root as the project root.
 3. Add `GROQ_API_KEY` as a **sensitive environment variable** for the intended environment. Leave it unset if each visitor should supply their own key.
 4. Deploy. When adding or changing environment variables, redeploy to apply them.
-5. Open the public production URL and test a normal run and an AI-assisted repair.
+5. Open the public production URL, test a normal run, then test **Help me fix this error**, **Apply to editor**, and a manual rerun.
 
 The app has no login flow. To offer public access, the production domain must also permit anonymous visitors in your Vercel project settings.
 

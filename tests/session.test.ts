@@ -22,6 +22,25 @@ test("session export preserves code, input, conversation, runs, and repair undo"
   assert.deepEqual(parseSession(exportSession(session)), session);
 });
 
+test("legacy automatic repair preferences are dropped without losing saved work", () => {
+  const session = createSession();
+  session.files.python = { code: "print('saved work')", stdin: "my input\n" };
+  session.messages.push({ id: "saved-message", role: "assistant", content: "Here is a suggestion.", language: "python", code: "print('suggested code')", createdAt: session.createdAt });
+  session.runs.push({ id: "saved-run", language: "python", code: "print('saved work')", stdout: "saved work\n", stderr: "", exitCode: 0, durationMs: 10, createdAt: session.createdAt });
+  session.checkpoints.push({ id: "saved-checkpoint", language: "python", code: "print('earlier work')", reason: "Before applying a suggestion", createdAt: session.createdAt });
+  assert.equal(Object.hasOwn(session, "autoFix"), false);
+
+  for (const autoFix of [true, false]) {
+    const legacy = { ...session, autoFix };
+    const migrated = parseSession(JSON.stringify(legacy));
+    assert.deepEqual(migrated, session, "legacy settings must not discard code, conversation, runs, or undo history");
+    assert.ok(migrated);
+    assert.equal(Object.hasOwn(migrated, "autoFix"), false);
+    assert.equal(Object.hasOwn(JSON.parse(exportSession(migrated)), "autoFix"), false);
+    assert.equal(Object.hasOwn(JSON.parse(exportSession(legacy)), "autoFix"), false);
+  }
+});
+
 test("exports and imports remove unrecognized credential fields at every level", () => {
   const session = createSession();
   const unsafe = {
